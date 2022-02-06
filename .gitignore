@@ -12,6 +12,6 @@ test_gen
 test_gen.caches
 *.iws
 build.properties
-.mps/libraries.xml
+workspace.xml
 lib/
 !lib/.keepme
