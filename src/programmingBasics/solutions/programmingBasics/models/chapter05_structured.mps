@@ -952,7 +952,7 @@
           </node>
           <node concept="mLuIC" id="5AlTalNLb8D" role="2zM23F">
             <node concept="2gteSW" id="5AlTalNLb8E" role="2gteSx">
-              <property role="2gteSQ" value="0" />
+              <property role="2gteSQ" value="-∞" />
               <property role="2gteSD" value="∞" />
             </node>
             <node concept="2gteS_" id="5AlTalNLb8F" role="2gteVg">
@@ -1190,7 +1190,7 @@
           </node>
           <node concept="mLuIC" id="5AlTalNZKSk" role="2zM23F">
             <node concept="2gteSW" id="5AlTalNZKSl" role="2gteSx">
-              <property role="2gteSQ" value="0" />
+              <property role="2gteSQ" value="-∞" />
               <property role="2gteSD" value="∞" />
             </node>
             <node concept="2gteS_" id="5AlTalNZKSm" role="2gteVg">

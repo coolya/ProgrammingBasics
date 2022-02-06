@@ -77,7 +77,10 @@
       </concept>
       <concept id="7554398283339757344" name="org.iets3.core.expr.collections.structure.ListType" flags="ng" index="3iBYCm" />
       <concept id="8448265401163555724" name="org.iets3.core.expr.collections.structure.MapWithOp" flags="ng" index="1DFusj" />
-      <concept id="8448265401163110902" name="org.iets3.core.expr.collections.structure.MapType" flags="ng" index="1DGDPD" />
+      <concept id="8448265401163110902" name="org.iets3.core.expr.collections.structure.MapType" flags="ng" index="1DGDPD">
+        <child id="8448265401163110905" name="valueType" index="1DGDPA" />
+        <child id="8448265401163110903" name="keyType" index="1DGDPC" />
+      </concept>
       <concept id="8448265401163111273" name="org.iets3.core.expr.collections.structure.KeyValuePair" flags="ng" index="1DGDZQ">
         <child id="8448265401163111276" name="val" index="1DGDZN" />
         <child id="8448265401163111274" name="key" index="1DGDZP" />
@@ -2899,6 +2902,12 @@
                 <property role="2gteVv" value="1" />
               </node>
             </node>
+            <node concept="30bdrU" id="2nIvIqY7l3Z" role="1DGDPC" />
+            <node concept="mLuIC" id="2nIvIqY7lzl" role="1DGDPA">
+              <node concept="2gteS_" id="2nIvIqY8b$u" role="2gteVg">
+                <property role="2gteVv" value="1" />
+              </node>
+            </node>
           </node>
         </node>
       </node>
@@ -3106,6 +3115,12 @@
                 <property role="2gteVv" value="1" />
               </node>
             </node>
+            <node concept="30bdrU" id="2nIvIqY7gqu" role="1DGDPC" />
+            <node concept="mLuIC" id="2nIvIqY7gv7" role="1DGDPA">
+              <node concept="2gteS_" id="2nIvIqY8dMF" role="2gteVg">
+                <property role="2gteVv" value="1" />
+              </node>
+            </node>
           </node>
         </node>
         <node concept="2zPypq" id="JV9IWPMqOk" role="3$tU1w">
@@ -3160,6 +3175,8 @@
           <node concept="1DGDPD" id="JV9IWPMqOO" role="2zM23F">
             <node concept="30bdrU" id="JV9IWPMqOP" role="1bPNon" />
             <node concept="30bdrU" id="JV9IWPMrJD" role="1bPNsv" />
+            <node concept="30bdrU" id="2nIvIqY7gzQ" role="1DGDPC" />
+            <node concept="30bdrU" id="2nIvIqY7gA5" role="1DGDPA" />
           </node>
         </node>
       </node>
