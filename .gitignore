@@ -13,3 +13,5 @@ test_gen.caches
 *.iws
 build.properties
 .mps/libraries.xml
+lib/
+!lib/.keepme

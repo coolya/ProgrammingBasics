@@ -128,27 +128,18 @@ Currently, it involves several steps to get the examples to run. We are working
 on a much simpler (one-click) solution, but for now you have to work through the
 following steps:
 
-1. Download and install [Jetbrains MPS, Version 2018.2.x](https://www.jetbrains.com/mps/download) in the variant specific to your operating system. MPS is implemented in Java, but it brings along its own JDK.
+1. Download and install [Jetbrains MPS, Version 2020.1.x](https://www.jetbrains.com/mps/download/previous.html#version20211) in the variant specific to your operating system. MPS is implemented in Java, but it brings along its own JDK.
 
-2. Install the mbeddr.platform. This is a whole set of extensions to MPS that
-have been used in the implementation of this tutorial. 
-    - Download the [mbeddr.platform](https://build.mbeddr.com/repository/downloadAll/Mbeddr2_Mbeddr_Gradle_platform/.lastSuccessful/artifacts.zip); when prompted to log into the build server, use the `Log in as Guest` link.
-    - Unzip the ZIP file; this leads to a whole set of 50 or so folders, each 
-      representing MPS plugins. Check out [this picture](unzipOnMac.png) if 
-      you are unsure which folders exactly to copy.
-    - Take this set of folders and copy them into the `plugins` (note the "s")
-      folder of your MPS installation
+2. Download the sources [from this repository](https://github.com/markusvoelter/ProgrammingBasics), eiter by cloning the
+   repository or by downloading (and then unzipping) the source ZIP file.
+   Here is a [direct link](https://github.com/markusvoelter/ProgrammingBasics/archive/refs/heads/master.zip) to the source code as a zip.
 
 3. Install the iets3.opensource. This contains the KernelF language on which this
    tutorial is based. 
-    - Download [iets3.opensource](https://build.mbeddr.com/repository/downloadAll/Iets3_BuildOrgIets3core/.lastSuccessful/artifacts.zip)
-    - Follow the same unzip/copy routine as with the mbeddr.platform above.
-
-4. Download the sources [from this repository](https://github.com/markusvoelter/ProgrammingBasics), eiter by cloning the 
-   repository or by downloading (and then unzipping) the source ZIP file.
-   There's a bright green button on the [linked page](https://github.com/markusvoelter/ProgrammingBasics).
-   
-5. Run MPS. Open the project that contains the examples. In MPS, projects
+    - Download [iets3.opensource](https://github.com/IETS3/iets3.opensource/releases/download/nightly-2021.1.4751.7d7399a/org.iets3.opensource-with-dependencies-2021.1.4751.7d7399a.zip)
+    - Unzip the archive and place its content into the lib folder of source code extracted in the previous step.
+    
+4. Run MPS. Open the project that contains the examples. In MPS, projects
    are folders with a `.mps` subfolder in it. The `src/programmingBasics`
    is the project that contains the example code.   
 
