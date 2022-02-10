@@ -1,20 +1,37 @@
+//will pull the groovy classes/types from nexus to the classpath
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+    }
+    dependencies {
+        classpath 'de.itemis.mps:mps-gradle-plugin:1.5.+'
+    }
+}
+plugins {
+    id 'maven-publish'
+    id 'base'
+    id 'co.riiid.gradle' version '0.4.2'
+}
+
+
 group 'de.itemis'
 description ="RCP with all needed plugins"
 
 //will import the gradle plugins fetched from nexus
-import de.itemis.mps.gradle.CreateDmg
+import de.itemis.mps.gradle.BundleMacosJdk
+import de.itemis.mps.gradle.GitBasedVersioning
 import de.itemis.mps.gradle.GenerateLibrariesXml
 import de.itemis.mps.gradle.RunAntScript
 import de.itemis.mps.gradle.BuildLanguages
 
 
-apply plugin: 'maven-publish'
-apply plugin: 'base'
+
+
 
 // Dependency versions
-ext.mpsVersion = '2018.1'
-ext.mbeddrVersion = '1.0.+'
-ext.iets3Version = '0.1.+'
+ext.mpsVersion = '2021.1.3'
+ext.iets3Version = '2021.1.+'
 
 // Default repository credentials
 if (!project.hasProperty('nexusUsername')) {
@@ -28,20 +45,7 @@ ext.dependencyRepositories = [
         'https://projects.itemis.de/nexus/content/repositories/mbeddr_snapshots'
         ]
 
-//will pull the groovy classes/types from nexus to the classpath
-buildscript {
-    repositories {
-        maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
-    }
-    dependencies {
-        classpath 'de.itemis.mps:mps-gradle-plugin:1.0.55+'
-    }
-}
 
-task wrapper(type: Wrapper) {
-    gradleVersion '4.6'
-    distributionType 'all'
-}
 
 configurations {
     mps
@@ -53,10 +57,9 @@ configurations {
 dependencies {
     mps "com.jetbrains:mps:$mpsVersion"
 	mbeddrPlatformArtifacts "org.iets3:opensource:$iets3Version"
-    mbeddrPlatformArtifacts "com.mbeddr:allScripts:$mbeddrVersion"
-    mbeddrPlatformArtifacts "com.mbeddr:platform:$mbeddrVersion"
-    jdk "com.jetbrains.jdk:jdk:8u112b408.4:windows_x64@tgz"
-	jdk "com.jetbrains.jdk:jdk:8u112b408.4:osx_x64@tgz"
+    jdk "com.jetbrains.jdk:jbr_jcef:11_0_11-b1341.60:windows-x64@tgz"
+	jdk "com.jetbrains.jdk:jbr_jcef:11_0_11-b1341.60:osx-x64@tgz"
+	jdk "com.jetbrains.jdk:jbr_jcef:11_0_11-b1341.60:osx-aarch64@tgz"
     ant_lib "org.apache.ant:ant-junit:1.10.1"
 }
 
@@ -84,12 +87,6 @@ repositories {
 if (!hasProperty("jdk_home")) {
     def java_home = System.properties['java.home']
     def jdk_home = java_home
-    if (!file("$jdk_home/lib/tools.jar").isFile()) {
-        jdk_home = jdk_home + "/.."
-    }
-    if (!file("$jdk_home/lib/tools.jar").isFile()) {
-        throw new GradleException("Was not able to locate jdk home folder. Use 'jdk_home' project variable to specify JDK location explicitly. Current JAVA_HOME is: $java_home")
-    }
     ext.jdk_home = jdk_home
 }
 
@@ -200,17 +197,42 @@ task build_macDistro(type: RunAntScript, dependsOn: [build_genericDistro]) {
     targets 'clean', 'assemble'
 }
 
-task build_dmg(type: CreateDmg, dependsOn: build_macDistro ) {
+task build_dmg(type: BundleMacosJdk, dependsOn: build_macDistro ) {
     description "Main task to build macOS RCP"
     rcpArtifact rootProject.file('artifacts/rcp.distro.mac/MPS_RCP-mac.zip')
-    jdkDependency "com.jetbrains.jdk:jdk:8u112b408.4:osx_x64@tgz"
-    backgroundImage rootProject.file('branding/rcpAbout.png')
-    dmgFile rootProject.file('artifacts/rcp-macos.dmg')
+    jdkDependency "com.jetbrains.jdk:jbr_jcef:11_0_11-b1341.60:osx-x64@tgz"
+    jdkDirname "."
+    outputFile rootProject.file('artifacts/rcp-macos-intel.tgz')
+}
+
+task build_dmg_aarch(type: BundleMacosJdk, dependsOn: build_macDistro ) {
+    description "Main task to build macOS RCP"
+    rcpArtifact rootProject.file('artifacts/rcp.distro.mac/MPS_RCP-mac.zip')
+    jdkDependency "com.jetbrains.jdk:jbr_jcef:11_0_11-b1341.60:osx-aarch64@tgz"
+    jdkDirname "."
+    outputFile rootProject.file('artifacts/rcp-macos-apple-silicon.tgz')
 }
 
 task buildAll (
-    dependsOn: [build_winDistro, build_dmg]) {
+    dependsOn: [build_winDistro, build_dmg, build_dmg_aarch]) {
           description "Creates RCPs for: MacOS, Windows"
     }
 
 rootProject.defaultTasks 'buildAll'
+
+github {
+    owner = System.getenv("GITHUB_REPOSITORY_OWNER") ?: "none"
+    repo = "ProgrammingBasics"
+    token = rootProject.findProperty('github.token') ?: 'empty'
+    tagName = 'nightly-' + version
+    targetCommitish = GitBasedVersioning.getGitCommitHash()
+    name = 'Nighly Build ' + version
+    prerelease = true
+    assets = [rootProject.file('artifacts/rcp-macos-apple-silicon.tgz'), rootProject.file('artifacts/rcp-macos-intel.tgz'), ]
+}
+githubRelease.doFirst {
+    // do late body init to avoid executing listMergedPRs during config phase
+    github {
+        body = releaseNotes
+    }
+}
